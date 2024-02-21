@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  r3n:
+    restart: always
+    container_name: r3n
+    build: .
+    labels:
+      - traefik.http.routers.react-three-next.rule=Host(`r3n.example.com`)
+    networks:
+      - traefik_default
+
+networks:
+  traefik_default:
+    external: true
