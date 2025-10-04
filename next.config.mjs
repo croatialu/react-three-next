@@ -1,4 +1,9 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
+import process from 'node:process'
+
+import PWA from '@ducanh2912/next-pwa'
+import BundleAnalyzer from '@next/bundle-analyzer'
+
+const withBundleAnalyzer = BundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 })
 
@@ -6,11 +11,14 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
  * A fork of 'next-pwa' that has app directory support
  * @see https://github.com/shadowwalker/next-pwa/issues/424#issuecomment-1332258575
  */
-const withPWA = require('@ducanh2912/next-pwa').default({
+const withPWA = PWA({
   dest: 'public',
   disable: process.env.NODE_ENV === 'development',
 })
 
+/**
+ * @type {import('next').NextConfig}
+ */
 const nextConfig = {
   // uncomment the following snippet if using styled components
   // compiler: {
@@ -29,10 +37,10 @@ const nextConfig = {
       exclude: config.exclude,
       use: [
         {
-          loader: require.resolve('url-loader'),
+          loader: 'url-loader',
           options: {
             limit: config.inlineImageLimit,
-            fallback: require.resolve('file-loader'),
+            fallback: 'file-loader',
             publicPath: `${config.assetPrefix}/_next/static/images/`,
             outputPath: `${isServer ? '../' : ''}static/images/`,
             name: '[name]-[hash].[ext]',
@@ -55,7 +63,7 @@ const nextConfig = {
 
 const KEYS_TO_OMIT = ['webpackDevMiddleware', 'configOrigin', 'target', 'analyticsId', 'webpack5', 'amp', 'assetPrefix']
 
-module.exports = (_phase, { defaultConfig }) => {
+export default (_phase, { defaultConfig }) => {
   const plugins = [[withPWA], [withBundleAnalyzer, {}]]
 
   const wConfig = plugins.reduce((acc, [plugin, config]) => plugin({ ...acc, ...config }), {

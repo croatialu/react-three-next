@@ -1,8 +1,16 @@
 'use client'
 
-import { View, ViewProps } from '@react-three/drei'
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
 
-export default View as {
-  Port: () => React.ReactNode;
-} & React.ForwardRefExoticComponent<Omit<ViewProps, 'track'> & React.RefAttributes<HTMLElement | THREE.Group>>;
-
+export function Common({ color, orbit = false }: { color?: string, orbit?: boolean }) {
+  return (
+    <>
+      {color && <color attach="background" args={[color]} />}
+      <ambientLight />
+      <pointLight position={[20, 30, 10]} intensity={3} decay={0.2} />
+      <pointLight position={[-10, -10, -10]} color="blue" decay={0.2} />
+      <PerspectiveCamera makeDefault fov={40} position={[0, 0, 6]} />
+      {orbit && <OrbitControls />}
+    </>
+  )
+}

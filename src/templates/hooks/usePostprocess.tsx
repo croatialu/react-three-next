@@ -1,3 +1,4 @@
+/* eslint-disable style/no-tabs */
 import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useMemo } from 'react'
 import * as THREE from 'three'
@@ -6,18 +7,20 @@ function getFullscreenTriangle() {
   const geometry = new THREE.BufferGeometry()
   const vertices = new Float32Array([-1, -1, 3, -1, -1, 3])
   const uvs = new Float32Array([0, 0, 2, 0, 0, 2])
+
   geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 2))
   geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2))
+
   return geometry
 }
 
 // Basic shader postprocess based on the template https://gist.github.com/RenaudRohlinger/bd5d15316a04d04380e93f10401c40e7
 // USAGE: Simply call usePostprocess hook in your r3f component to apply the shader to the canvas as a postprocess effect
-const usePostProcess = () => {
-  const [{ dpr }, size, gl] = useThree((s) => [s.viewport, s.size, s.gl] as const)
+function usePostProcess() {
+  const [{ dpr }, size] = useThree(s => [s.viewport, s.size, s.gl] as const)
 
   const [screenCamera, screenScene, screen, renderTarget] = useMemo(() => {
-    let screenScene = new THREE.Scene()
+    const screenScene = new THREE.Scene()
     const screenCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
     const screen = new THREE.Mesh(getFullscreenTriangle())
     screen.frustumCulled = false
@@ -72,22 +75,33 @@ const usePostProcess = () => {
         }
       `,
       glslVersion: THREE.GLSL3,
-    });
-    (screen.material as any).uniforms.diffuse.value = renderTarget.texture
+    })
+
+    const material = screen.material as THREE.ShaderMaterial
+    material.uniforms.diffuse.value = renderTarget.texture
+
     return [screenCamera, screenScene, screen, renderTarget]
   }, [])
 
   useEffect(() => {
     const { width, height } = size
-    const { w, h } = { w: width * dpr, h: height * dpr }
+    const { w, h } = {
+      w: width * dpr,
+      h: height * dpr,
+    }
     renderTarget.setSize(w, h)
   }, [dpr, size, renderTarget])
 
   useFrame(({ scene, camera, gl }, delta) => {
     gl.setRenderTarget(renderTarget)
     gl.render(scene, camera)
-    gl.setRenderTarget(null);
-    if (screen) (screen.material as any).uniforms.time.value += delta
+
+    gl.setRenderTarget(null)
+    const material = screen.material as THREE.ShaderMaterial
+    if (screen && material.uniforms) {
+      material.uniforms.time.value += delta
+    }
+
     gl.render(screenScene, screenCamera)
   }, 1)
   return null

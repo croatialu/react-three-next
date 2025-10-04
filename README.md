@@ -7,7 +7,7 @@ A minimalist starter for NextJS, @react-three/fiber and Threejs.
 ![](https://user-images.githubusercontent.com/2223602/192515435-a3d2c1bb-b79a-428e-92e5-f44c97a54bf7.jpg)
 
 - TTL ~ 100ms
-- First load JS ~ 79kb
+- First load JS ~79kb
 - Lighthouse score of 100 (Performance, Accessibility, Best Practices, SEO)
 
 This starter allows you to navigate seamlessly between pages with dynamic dom and/or canvas content without reloading or creating a new canvas every time. 3D components are usable anywhere in the dom. The events, dom, viewport, everything is synchronized!
@@ -18,24 +18,7 @@ This starter allows you to navigate seamlessly between pages with dynamic dom an
 
 ### How to use
 
-#### Installation
-
-_Tailwind is the default style. styled-components (styled) are also available._
-
-```sh
-yarn create r3f-app next my-app
-# yarn create r3f-app <next> my-app <tailwind|styled>? -ts?
-# npx create-r3f-app next my-app
-```
-
-### :passport_control: Typescript
-
-For typescript add the parameter `-ts` or `--typescript`:
-
-```sh
-yarn create r3f-app next my-app -ts
-# npx create-r3f-app next my-app -ts
-```
+#### Use this template
 
 ### :mount_fuji: Features
 
@@ -50,8 +33,8 @@ yarn create r3f-app next my-app -ts
 Thanks to [tunnel-rat](https://github.com/pmndrs/tunnel-rat) the starter can portal components between separate renderers. Anything rendered inside the `<View/>` component of the starter will be rendered in the 3D Context. For better performances it uses gl.scissor to cut the viewport into segments.
 
 ```jsx
-<div className='relative'>
-  <View orbit className='relative sm:h-48 sm:w-full'>
+<div className="relative">
+  <View orbit className="relative sm:h-48 sm:w-full">
     <Dog scale={2} />
     // Some 3D components will be rendered here
   </View>
@@ -60,11 +43,11 @@ Thanks to [tunnel-rat](https://github.com/pmndrs/tunnel-rat) the starter can por
 
 ### :control_knobs: Available Scripts
 
-- `yarn dev` - Next dev
-- `yarn analyze` - Generate bundle-analyzer
-- `yarn lint` - Audit code quality
-- `yarn build` - Next build
-- `yarn start` - Next start
+- `pnpm dev` - Next dev
+- `pnpm analyze` - Generate bundle-analyzer
+- `pnpm lint` - Audit code quality
+- `pnpm build` - Next build
+- `pnpm start` - Next start
 
 ### ⬛ Stack
 
@@ -79,7 +62,7 @@ Thanks to [tunnel-rat](https://github.com/pmndrs/tunnel-rat) the starter can por
 
 ```bash
 git clone https://github.com/pmndrs/react-three-next
-&& cd react-three-next && yarn install
+&& cd react-three-next && pnpm install
 ```
 
 ### Maintainers :
